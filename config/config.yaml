@@ -4,22 +4,27 @@ log_level: INFO
 run_name: "default_run"
 seed: 42
 
+base_path: /media/Data/shanezhu/BindSculpt
+target_name: 3bik_PD-1_truncated
+
 paths:
-  target_fasta: data/inputs/9j8z_template.fasta
-  data_inputs: data/inputs
-  base_output_dir: data/outputs_v0705_9J8Z_template
+  target_fasta: ${base_path}/inputs/${target_name}.fasta
+  data_inputs: ${base_path}/inputs
+  base_output_dir: /media/Data/hebeibei/Share/outputs/${target_name}  # 输出到 Share 目录
   run_output_dir: ${paths.base_output_dir}/${run_name}
-  model_weights: data/models
+  model_weights: ${base_path}/models
   embeddings_dir: ${paths.run_output_dir}/embeddings
   surrogate_models_dir: ${paths.run_output_dir}/surrogate_models
   log_dir: ${paths.run_output_dir}/logs
-  target_msa_dir: '/home/hebeibei/Work/dl/code/BindSculpt/data/inputs/9j8z_template.a3m'  # for AF3
-  target_cif_path: '/home/hebeibei/Work/dl/code/BindSculpt/data/inputs/9j8z_template.cif'  # as template
+  target_msa_dir: ${base_path}/inputs/${target_name}.a3m
+  target_cif_path: ${base_path}/inputs/3bik_PD1_converted.cif
 
 models:
   seq2seq:
-    model_path: /home/hebeibei/Data/model/bgi_protein_design/weights/seq2seq/hf # e.g., data/models/seq2seq_weights/hf
-    tokenizer_path: /home/hebeibei/Data/model/esm2_t33_650M_UR50D # e.g., data/models/seq2seq_weights/esm2_t33_650M_UR50D
+    model_path: /media/Data/hebeibei/model/bgi_protein_design/weights/seq2seq/hf # e.g., data/models/seq2seq_weights/hf
+    tokenizer_path: /media/Data/hebeibei/model/esm2_t33_650M_UR50D/ # e.g., data/models/seq2seq_weights/esm2_t33_650M_UR50D
+    tokenizer_kwargs:
+      local_files_only: true
     # Parameters for generation
     generation_params:
       seed: 42
@@ -45,14 +50,14 @@ models:
     # List of sampling strategies to use (can be one or multiple)
     sampling_strategies: 'top_p' # beam, top_k,  This will be a list in Python
     define_binding:
-      enabled: True
+      enabled: False #True
       binding_region: 1-11,68-84,148-170,241-253  # comma seperated regions
 
 
   alphafold3:
     enabled: True
     # The actual Python script for running AlphaFold3
-    executable_path: /home/hebeibei/Software/AlphaFold3/alphafold3-main/run_alphafold.py
+    executable_path: /media/Data/shanezhu/alphafold3_install/alphafold3/run_alphafold.py
 
     # Base directories for AlphaFold3's dependencies
     db_dir: /media/Data/hebeibei/AlphaFold3_Genetic_Databases/
@@ -66,7 +71,8 @@ models:
     nhmmer_n_cpu: 24
     max_template_date: 2025-05-09 # Keep this updated or remove if not needed
     force_output_dir: True # Maps to --force_output_dir True
-    conda_env_name: "af3"
+    conda_env_name: "alphafold3"
+    conda_cmd: "conda" 
     num_diffusion_samples: 3 # 5
 
   esm_encoder:
@@ -126,7 +132,7 @@ mutagenesis:
 
 active_learning:
   num_initial_diversity_groups: 4 # 10
-  num_iterations: 16 # 15
+  num_iterations: 15 # 15
 #  batch_size: 3 # 10
 #  acquisition_strategy: 'top_iptm' # Maps to a function in src/core/acquisition.py
   selection_strategy_for_evaluation: "top_bottom_uncertain_predicted_score" # "top_iptm", "top_n_bottom_m_predicted_iptm", "top_n_uncertain_m_predicted_iptm","top_bottom_uncertain_predicted_iptm", "random",

@@ -27,6 +27,11 @@ logger = logging.getLogger(__name__)
 class ProteinMPNNRedesigner:
     def __init__(self, config):
         self.config = config.models.proteinmpnn
+
+        import shutil
+        print("DEBUG CONDA PATH =", shutil.which("conda"))
+        print("DEBUG MAMBA PATH =", shutil.which("mamba"))
+        
         self.global_config = config  # Keep a reference to global config for paths
 
         self.executable_path = self.config.executable_path
@@ -47,7 +52,17 @@ class ProteinMPNNRedesigner:
             else:
                 try:
                     # Check for mamba/conda
-                    subprocess.run(["mamba", "--version"], check=True, capture_output=True, text=True)
+                    # subprocess.run(["mamba", "--version"], check=True, capture_output=True, text=True)
+                    try:
+                        subprocess.run(["mamba", "--version"], check=True, capture_output=True, text=True)
+                    except Exception:
+                        try:
+                            subprocess.run(["conda", "--version"], check=True, capture_output=True, text=True)
+                            logger.info("Falling back to conda for ProteinMPNN execution.")
+                        except Exception:
+                            logger.error("Neither mamba nor conda command found. ProteinMPNN redesign disabled.")
+                            self.enabled = False
+
                     logger.info(
                         f"ProteinMPNN Redesigner initialized. Enabled: {self.enabled}.")
                 except (subprocess.CalledProcessError, FileNotFoundError):

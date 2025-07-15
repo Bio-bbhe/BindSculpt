@@ -379,7 +379,7 @@ class AlphaFold3Predictor:
 
         # --- 3. Construct and Execute the SINGLE AlphaFold3 command for the batch ---
         cmd = [
-            "mamba", "run", "-n", self.conda_env_name,
+            "conda", "run", "-n", self.conda_env_name,
             "python",
             self.executable_path,
             "--db_dir", self.db_dir,
