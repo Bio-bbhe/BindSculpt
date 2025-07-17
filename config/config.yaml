@@ -106,7 +106,7 @@ models:
     fixed_pos_distance_threshold: 2.5  # 2.5 = almost completely re-design binder
     chains_to_design: [ "B" ]
     chains_to_keep_fixed_for_mpnn: [ "A" ]
-    num_top_mpnn_seqs_to_evaluate: 1
+    num_top_mpnn_seqs_to_evaluate: 2
     relative_solvent_accessibility: 20  # for final design, get surface-exposed residues to redesign
 
 mutagenesis:
@@ -126,7 +126,7 @@ mutagenesis:
 
 active_learning:
   num_initial_diversity_groups: 4 # 10
-  num_iterations: 16 # 15
+  num_iterations: 15 # 15
 #  batch_size: 3 # 10
 #  acquisition_strategy: 'top_iptm' # Maps to a function in src/core/acquisition.py
   selection_strategy_for_evaluation: "top_bottom_uncertain_predicted_score" # "top_iptm", "top_n_bottom_m_predicted_iptm", "top_n_uncertain_m_predicted_iptm","top_bottom_uncertain_predicted_iptm", "random",

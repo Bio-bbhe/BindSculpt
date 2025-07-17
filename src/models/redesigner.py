@@ -310,7 +310,7 @@ class ProteinMPNNRedesigner:
             "--batch_size", str(self.config.num_seq_per_target_pdb),  # Batch per PDB
             "--use_soluble_model",  # Assuming this is desired
             "--model_name", "v_48_020",  # Or make configurable
-            "--sampling_temp", str(self.config.sampling_temp) if al_design else '0.1',  # final redesign using 0.1
+            "--sampling_temp", str(self.config.sampling_temp) if al_design else '0.5',  # final redesign using 0.5
         ]
         if not self._run_mpnn_subprocess(cmd4, f"{batch_run_identifier}_step4_run_mpnn"):
             return []  # Critical failure
