@@ -15,8 +15,12 @@ often a superior exploration strategy to just "bottom N."
 
 4. 每10轮重新设计plddt >70, interact residue >= 7的binder，那就需要把plddt写到al.csv里，可以每10轮写一次
 
-0704:
+07-04:
 1. replace entire generator and add to config
     define_binding:
       enabled: True
       binding_region: 1-11,68-84,148-170,241-253  # comma seperated regions
+
+07-17:
+1. if len(candidates_for_final_redesign) >= 60: change, this cannot ensure successful design
+2. pay attention to Data/Share/outputs/6vqn_PD-L1/run_008_temp1.0, this is problematic

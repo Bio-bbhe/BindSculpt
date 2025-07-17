@@ -79,7 +79,7 @@ if __name__ == '__main__':
         help="Path to the input CIF file (e.g., /path/to/3bik.cif)")
     arg_parser.add_argument("--output_file",type=str,default='/home/hebeibei/Work/dl/code/BindSculpt/tests/template_filtered.cif',
         help="Path to save the filtered output CIF file (e.g., /path/to/template_filtered.cif)")
-    arg_parser.add_argument("--target_chain_id", type=str,default='B', help="The ID of the chain to keep (e.g., B)")
+    arg_parser.add_argument("--target_chain_id", type=str,default='A', help="The ID of the chain to keep (e.g., B)")
     arg_parser.add_argument("--structure_id",type=str,default="template", help="ID for the PDB structure (default: template)")
     args = arg_parser.parse_args()
 

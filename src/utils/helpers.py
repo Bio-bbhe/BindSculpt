@@ -123,7 +123,7 @@ def get_bad_word_ids_for_tokenizer(tokenizer):
     standard_aas = set("ACDEFGHIKLMNPQRSTVWY")
     bad_token_ids = []
     for token, token_id in tokenizer.get_vocab().items():
-        if len(token) == 1 and token.isalpha() and token.upper() not in standard_aas:
+        if token.upper() not in standard_aas:  # len(token) == 1 and token.isalpha() and
             bad_token_ids.append([token_id])
     # Add special tokens if they are not supposed to appear in generated seqs, e.g., <unk>, <mask>
     if tokenizer.unk_token_id is not None:
