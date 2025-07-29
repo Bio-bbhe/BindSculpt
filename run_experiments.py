@@ -10,7 +10,7 @@ from typing import List, Dict, Any
 
 param_space = {
     'models.seq2seq.generation_params.temperature': [1.0, 1.5, 1.75, 2.0],
-    'models.seq2seq.generation_params.min_length': [50, 70],  # 10
+    'models.seq2seq.generation_params.min_length': [30, 50, 70],  # 10
     'models.seq2seq.generation_params.max_length': [80, 100, 150],  # 20
     'models.seq2seq.generation_params.seed': [1, 10, 42, 100, 1000, 1024, 2048]
     # Add any other parameters you want to explore here
