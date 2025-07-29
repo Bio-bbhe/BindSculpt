@@ -56,7 +56,7 @@ def run_bindsculpt(resume_from_iter: int = 0):  # <--- NEW: Add argument with de
 
 
 if __name__ == "__main__":
-    run_bindsculpt(resume_from_iter=0)
+    run_bindsculpt(resume_from_iter=21)
 
     ## if use run_bindsculpt alone:
     # parser = argparse.ArgumentParser(description="Run the BindSculpt Active Learning pipeline.")

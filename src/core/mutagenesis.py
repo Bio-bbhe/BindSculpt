@@ -5,6 +5,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 import random  # For random mutations
 import math
+import uuid
 import time
 
 logger = logging.getLogger(__name__)
@@ -33,7 +34,8 @@ class Mutagenesis:
                     mutant_seq_list[i] = mutant_aa
                     mutant_seq = "".join(mutant_seq_list)
                     # mutant_id = f"{parent_id}_S_{original_aa}{i + 1}{mutant_aa}"  # Added _S for single mutant
-                    mutant_id = f"{parent_id.split('__')[0]}__{int(time.time())}{k}"
+                    # mutant_id = f"{parent_id.split('__')[0]}__{int(time.time())}_i{iteration_num}_{k}"
+                    mutant_id = f"{parent_id.split('__')[0]}__{uuid.uuid4().hex[:16]}"
 
                     mutant_pool.append({
                         'id': mutant_id,
@@ -46,8 +48,6 @@ class Mutagenesis:
                     })
         logger.info(f"Generated {len(mutant_pool)} single mutants for parent {original_parent_id}.")
         return mutant_pool
-
-    import random
 
     def generate_single_plus_one_mutants(self, parent_sequence: str, parent_id: str, original_parent_id: str,
                                          iteration_num: int):
@@ -100,7 +100,7 @@ class Mutagenesis:
                         double_mutant_seq_list = list(single_mutant_seq)
                         double_mutant_seq_list[j] = mutant_aa_j
                         double_mutant_seq = "".join(double_mutant_seq_list)
-                        double_mutant_id = f"{parent_id.split('__')[0]}__{int(time.time())}{k}_D"
+                        double_mutant_id = f"{parent_id.split('__')[0]}__{uuid.uuid4().hex[:16]}"
 
                         # Add double mutant to pool
                         mutant_pool.append({
@@ -156,7 +156,7 @@ class Mutagenesis:
             mutant_seq = "".join(mutated_seq_list)
 
             # mutant_id = f"{parent_id}_M_{'_'.join(mutations_made_str)}"  # _M for multiple mutant
-            mutant_id = f"{parent_id.split('__')[0]}__{int(time.time())}{k}"
+            mutant_id = f"{parent_id.split('__')[0]}__{uuid.uuid4().hex[:16]}"
 
             if len(mutations_made_str) == 0:  # Handle case where no actual mutations could be made (e.g., all positions already ideal)
                 mutant_id = f"{parent_id}_M"  # Add a specific tag

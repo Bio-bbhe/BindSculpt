@@ -753,7 +753,7 @@ class ActiveLearningOrchestrator:
             #         f"No binders successfully evaluated by AF3 in Iteration {i}. Cannot proceed with further AL.")
             #     break
             final_iteration_num = i
-            if i >= 13:
+            if i >= 15:
                 # final pmpnn redesign
                 all_evaluated_binders_df = self.data_manager.get_al_state()
                 all_evaluated_binders_data = self.data_manager.load_embeddings_for_binders(
@@ -773,7 +773,7 @@ class ActiveLearningOrchestrator:
                     # b.get('interface_delta_unsat_hbonds') <= 3
                 ]
                 # print(candidates_for_final_redesign)
-                if len(candidates_for_final_redesign) >= 200:
+                if len(candidates_for_final_redesign) >= 250:
                     final_iteration_num = i
                     logger.info(f"Candidates for final pmpnn redesign reached {len(candidates_for_final_redesign)}, stopping AL loop.")
                     break
@@ -785,7 +785,7 @@ class ActiveLearningOrchestrator:
         final_iteration_num = final_iteration_num + 1
         all_evaluated_binders_df = self.data_manager.get_al_state()
 
-        top_n = all_evaluated_binders_df.nlargest(200, 'combined_score').to_dict(orient='records')
+        top_n = all_evaluated_binders_df.nlargest(300, 'combined_score').to_dict(orient='records')
 
         candidates_for_final_redesign = candidates_for_final_redesign if candidates_for_final_redesign else top_n
 
