@@ -58,6 +58,7 @@ class ProteinSeqDataset(Dataset):
 
 class BinderGenerator:
     def __init__(self, config):
+        self.global_config = config
         self.config = config.models.seq2seq
         self.model = None
         self.tokenizer = None
@@ -268,12 +269,17 @@ class BinderGenerator:
                         generated_seqs_for_target = decoded_sequences[start_idx:end_idx]
 
                         for seq_idx, generated_seq in enumerate(generated_seqs_for_target):
+                            generated_seq = generated_seq.replace("C", "S")
+                            # specially handle omit_AA, e.g., K and R
+                            omit_AAs = set(self.global_config.models.proteinmpnn.omit_AAs)
+                            if omit_AAs:
+                                generated_seq = ''.join('N' if aa in omit_AAs else aa for aa in generated_seq)
                             unique_generated_id = f"binder_{int(time.time())}_{seq_idx}"
                             results.append({
                                 'target_id': target_id,
                                 'target_sequence': target_seq,  # Storing original full sequence
                                 'input_target_region_sequence': input_region_seq,  # Save the actual input sequence
-                                'binder_sequence': generated_seq.replace("C", "S"),
+                                'binder_sequence': generated_seq,
                                 'sampling_strategy': sampling_strategy,
                                 'generation_params_str': params_str,
                                 'generation_time_s': round(method_elapsed_time / len(target_ids_batch), 1),

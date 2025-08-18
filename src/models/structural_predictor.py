@@ -33,6 +33,8 @@ class AlphaFold3Predictor:
         self.target_msa_dir = config.paths.target_msa_dir
         self.target_cif_path = config.paths.target_cif_path
         self.conda_env_name = self.config.conda_env_name
+        self.cpu = self.config.cpu
+        self.gpu = self.config.CUDA_VISIBLE_DEVICES
 
         # Base directory within the project for ALL AF3 runs' outputs (each run gets a subdirectory)
         self.project_af3_output_base_dir = os.path.join(config.paths.run_output_dir, self.config.output_subdir)
@@ -379,6 +381,8 @@ class AlphaFold3Predictor:
 
         # --- 3. Construct and Execute the SINGLE AlphaFold3 command for the batch ---
         cmd = [
+            "taskset", "-c", f"{self.cpu}",
+            "env", f"CUDA_VISIBLE_DEVICES={self.gpu}",
             "mamba", "run", "-n", self.conda_env_name,
             "python",
             self.executable_path,

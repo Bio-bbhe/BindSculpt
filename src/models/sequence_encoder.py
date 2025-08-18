@@ -230,7 +230,7 @@ class SequenceEncoder:
         # === NEW: FINAL FILE COUNT VERIFICATION ===
         saved_files = os.listdir(iter_embeddings_dir)
         saved_count = len(saved_files)
-        if saved_count != len(sequences_data):
+        if saved_count < len(sequences_data):
             missing = len(sequences_data) - saved_count
             logger.critical(
                 f"EMBEDDING FILE COUNT MISMATCH: Expected {len(sequences_data)} files, "

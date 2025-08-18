@@ -13,8 +13,9 @@ logger = logging.getLogger(__name__)
 
 class Mutagenesis:
     def __init__(self, config):
+        self.global_config = config
         self.config = config.mutagenesis
-        self.aa_alphabet = "ACDEFGHIKLMNPQRSTVWY"  # Standard amino acids
+        self.aa_alphabet = set("ACDEFGHIKLMNPQRSTVWY") - set(self.global_config.models.proteinmpnn.omit_AAs)  # Standard amino acids
         logger.info("Mutagenesis module initialized.")
 
     def generate_single_mutants(self, parent_sequence: str, parent_id: str, original_parent_id: str, iteration_num: int):

@@ -7,7 +7,7 @@ seed: 42
 paths:
   target_fasta: data/inputs/6vqn_PD-L1.fasta
   data_inputs: data/inputs
-  base_output_dir: data/outputs_6vqn_PD-L1_debug
+  base_output_dir: data/outputs_6vqn_PD-L1_peptide
   run_output_dir: ${paths.base_output_dir}/${run_name}
   model_weights: data/models
   embeddings_dir: ${paths.run_output_dir}/embeddings
@@ -68,6 +68,8 @@ models:
     force_output_dir: True # Maps to --force_output_dir True
     conda_env_name: "af3"
     num_diffusion_samples: 3 # 5 BACK to 3
+    CUDA_VISIBLE_DEVICES: "0"
+    cpu: "50-80"  # define based on machine
 
   esm_encoder:
     enabled: True # Set to True to use ESM embeddings
@@ -108,6 +110,7 @@ models:
     chains_to_keep_fixed_for_mpnn: [ "A" ]
     num_top_mpnn_seqs_to_evaluate: 2  # BACK to 2
     relative_solvent_accessibility: 20  # for final design, get surface-exposed residues to redesign
+    omit_AAs: KR  # for some peptides, omits K and R
 
 mutagenesis:
   enabled: True
@@ -125,14 +128,14 @@ mutagenesis:
     num_mutants_per_parent: 2000 # How many random multi-mutants to generate per parent
 
 active_learning:
-  num_initial_diversity_groups: 2 # 10
+  num_initial_diversity_groups: 1 # 10
   num_iterations: 20 # 15
 #  batch_size: 3 # 10
 #  acquisition_strategy: 'top_iptm' # Maps to a function in src/core/acquisition.py
   selection_strategy_for_evaluation: "top_bottom_uncertain_predicted_score" # "top_iptm", "top_n_bottom_m_predicted_iptm", "top_n_uncertain_m_predicted_iptm","top_bottom_uncertain_predicted_iptm", "random",
-  num_parent_binders_to_optimize: 2 # 10 BACK to 2
+  num_parent_binders_to_optimize: 1 # 10 BACK to 2
   num_binders_to_select_in_each_parent_for_mutagenesis: 5 # 15  BACK to 5
-  num_top_candidates_per_group: 10 # 13 BACK to 10    # Number of top candidates to select PER GROUP (e.g., per parent)
+  num_top_candidates_per_group: 13 # 13 BACK to 10    # Number of top candidates to select PER GROUP (e.g., per parent)
   num_bottom_candidates_per_group: 1 # BACK to 1 1 # Number of bottom candidates to select PER GROUP (e.g., for exploration)
   num_uncertain_candidates_per_group: 1 # BACK to 1 1 False  # Number of top uncertain candidates to select PER GROUP (e.g., for exploration)
   weight_for_iptm: 0.4
@@ -145,12 +148,12 @@ active_learning:
 
   # Parameters for "Solved Lineage" Handling ---
   solved_lineage_threshold_metric_value: 0.85 # e.g., combined_score >= 0.85
-  solved_lineage_min_binders_count: 2    # Min number of binders above threshold to consider lineage "solved"
+  solved_lineage_min_binders_count: 5    # Min number of binders above threshold to consider lineage "solved"
 
   # Quota for "Solved" Lineages during AF3 candidate selection
-  solved_lineage_num_top_candidates: 1
-  solved_lineage_num_bottom_candidates: 1
-  solved_lineage_num_uncertain_candidates: 1
+  solved_lineage_num_top_candidates: 3
+  solved_lineage_num_bottom_candidates: 0
+  solved_lineage_num_uncertain_candidates: 0
   # The selection_strategy_for_evaluation will apply for unsolved lineages,
   # and a modified version (top/bottom/uncertain) for solved ones.
 
@@ -167,10 +170,10 @@ filters:
     # ...
   complex_filters:
     enabled: True
-    min_iptm: 0.7  # 0.7
+    min_iptm: 0.8  # 0.7
     min_ptm: 0.8  # 0.8
     min_complex_plddt: 0.8  # 0.8
-    min_binder_plddt: 0.7  # 0.7
+    min_binder_plddt: 0.8  # 0.7
     min_pae: 5  # 5
     num_interface_resi: 7  # 7
     distance_for_counting_interface: 3.5  # 3.5

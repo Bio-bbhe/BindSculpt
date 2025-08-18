@@ -9,8 +9,11 @@ __pycache__/
 # Data and Logs
 data/
 tests/
+scripts/
 data/scratch/
 logs/
+src/filters/ipsae.py
+src/filters/ipsae_fun.py
 log.log
 TO_DO.txt
 nohup.out
