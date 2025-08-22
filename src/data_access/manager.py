@@ -94,6 +94,7 @@ class DataManager:
 
     def filter_binders(self):
         al_df = self.get_al_state()
+
         df = al_df[
             (al_df['af3_status'] == 'success') &
             (al_df['iptm'] >= self.config.filters.complex_filters.min_iptm) &
@@ -102,8 +103,8 @@ class DataManager:
             (al_df['binder_plddt'] >= self.config.filters.complex_filters.min_binder_plddt) &
             (al_df['pae'] <= self.config.filters.complex_filters.min_pae)
             ]
-
-        df.to_csv(self.al_iteration_state_path , index=False)
+        df = df.drop(columns=['embedding'])
+        df.to_csv(self.al_iteration_state_path, index=False)
 
         df = df[
             (df['shape_complementarity'] >= self.config.filters.complex_filters.min_shape_complementarity) &

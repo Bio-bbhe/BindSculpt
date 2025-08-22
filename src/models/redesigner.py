@@ -215,7 +215,7 @@ class ProteinMPNNRedesigner:
         # pymol.finish_launching(['pymol', '-cq'])
         for binder_entry in binders_to_redesign_data:
             pdb_path_original = binder_entry.get('af3_pdb_path')
-            if pdb_path_original and os.path.exists(pdb_path_original):
+            if isinstance(pdb_path_original, str) and os.path.exists(pdb_path_original):
                 # Use a consistent naming scheme for MPNN processing based on binder_entry['id']
                 pdb_file_path = f"{binder_entry['id']}.pdb"
                 pdb_path_for_pmpnn = os.path.join(batch_input_pdb_dir, pdb_file_path)

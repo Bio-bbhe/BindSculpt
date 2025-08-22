@@ -76,7 +76,7 @@ def run_experiment(config_overrides: Dict[str, Any], python_executable: str):
 
 def main():
     # Number of experiments you want to run
-    num_experiments = 8
+    num_experiments = 5
     os.environ["CUDA_VISIBLE_DEVICES"] = '0'
 
     # Generate the list of configurations

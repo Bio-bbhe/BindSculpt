@@ -7,7 +7,7 @@ seed: 42
 paths:
   target_fasta: data/inputs/6vqn_PD-L1.fasta
   data_inputs: data/inputs
-  base_output_dir: data/outputs_6vqn_PD-L1_peptide
+  base_output_dir: data/outputs_6vqn_PD-L1_peptide_ipsae
   run_output_dir: ${paths.base_output_dir}/${run_name}
   model_weights: data/models
   embeddings_dir: ${paths.run_output_dir}/embeddings
@@ -135,13 +135,14 @@ active_learning:
   selection_strategy_for_evaluation: "top_bottom_uncertain_predicted_score" # "top_iptm", "top_n_bottom_m_predicted_iptm", "top_n_uncertain_m_predicted_iptm","top_bottom_uncertain_predicted_iptm", "random",
   num_parent_binders_to_optimize: 1 # 10 BACK to 2
   num_binders_to_select_in_each_parent_for_mutagenesis: 5 # 15  BACK to 5
-  num_top_candidates_per_group: 13 # 13 BACK to 10    # Number of top candidates to select PER GROUP (e.g., per parent)
-  num_bottom_candidates_per_group: 1 # BACK to 1 1 # Number of bottom candidates to select PER GROUP (e.g., for exploration)
+  num_top_candidates_per_group: 14 # 13 BACK to 10    # Number of top candidates to select PER GROUP (e.g., per parent)
+  num_bottom_candidates_per_group: 0 # BACK to 1 1 # Number of bottom candidates to select PER GROUP (e.g., for exploration)
   num_uncertain_candidates_per_group: 1 # BACK to 1 1 False  # Number of top uncertain candidates to select PER GROUP (e.g., for exploration)
-  weight_for_iptm: 0.4
-  weight_for_ptm: 0.3
-  weight_for_plddt: 0.3
+  weight_for_iptm: 0.3
+  weight_for_ptm: 0.25
+  weight_for_plddt: 0.25
   weight_for_pae: -0.5
+  weight_for_ipsae: 0.2
   weight_for_sc: 0.0  # 0,1
   weight_for_hs: 0.0  # -0.5
   weight_for_unsH: 0.0  # -0.2
@@ -170,8 +171,8 @@ filters:
     # ...
   complex_filters:
     enabled: True
-    min_iptm: 0.8  # 0.7
-    min_ptm: 0.8  # 0.8
+    min_iptm: 0.85  # 0.7
+    min_ptm: 0.85  # 0.8
     min_complex_plddt: 0.8  # 0.8
     min_binder_plddt: 0.8  # 0.7
     min_pae: 5  # 5
@@ -179,4 +180,4 @@ filters:
     distance_for_counting_interface: 3.5  # 3.5
     min_shape_complementarity: 0.55  # 0.55
     max_interface_delta_unsat_hbonds: 3  # 3
-    max_surface_hydrophobicity: 0.35  # 0.35
+    max_surface_hydrophobicity: 0.5  # 0.35, 0.5 for peptide

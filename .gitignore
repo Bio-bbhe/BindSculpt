@@ -13,7 +13,6 @@ scripts/
 data/scratch/
 logs/
 src/filters/ipsae.py
-src/filters/ipsae_fun.py
 log.log
 TO_DO.txt
 nohup.out

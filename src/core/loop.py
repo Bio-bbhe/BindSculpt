@@ -179,6 +179,7 @@ class ActiveLearningOrchestrator:
         ptm_w = self.config.active_learning.weight_for_ptm
         plddt_w = self.config.active_learning.weight_for_plddt
         pae_w = self.config.active_learning.weight_for_pae
+        ipsae_w = self.config.active_learning.weight_for_ipsae
         sc_w = self.config.active_learning.weight_for_sc
         hs_w = self.config.active_learning.weight_for_hs
         unsH_w = self.config.active_learning.weight_for_unsH
@@ -195,6 +196,7 @@ class ActiveLearningOrchestrator:
                                                   ptm_w * binder_entry['ptm'] +
                                                   plddt_w * binder_entry['binder_plddt'] +
                                                   pae_w * binder_entry['pae'] / 37 +
+                                                  ipsae_w * binder_entry['ipsae_min'] +
                                                   sc_w * binder_entry['shape_complementarity'] +
                                                   hs_w * binder_entry['surface_hydrophobicity'] +
                                                   unsH_w * binder_entry['interface_delta_unsat_hbonds'] / 30

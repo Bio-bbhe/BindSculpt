@@ -16,6 +16,7 @@ from pyrosetta.rosetta.core.kinematics import MoveMap
 from pyrosetta.rosetta.protocols.simple_moves import AlignChainMover
 from src.utils.structure_utils import interface_resi_num
 from src.utils.helpers import validate_binder_contacts
+from src.utils.ipsae import calculate_ipsae_min
 
 
 logger = logging.getLogger(__name__)
@@ -92,6 +93,8 @@ class AlphaFold3Predictor:
                     'binder_plddt': None,
                     'target_plddt': None,
                     'pae': None,
+                    'ipsae_min': None,
+                    'lis_score': None,
                     'sc': None,
                     'surface_hydrophobicity': None,
                     'interface_delta_unsat_hbonds': None,
@@ -160,6 +163,8 @@ class AlphaFold3Predictor:
                     'binder_plddt': None,
                     'target_plddt': None,
                     'pae': None,
+                    'ipsae_min': None,
+                    'lis_score': None,
                     'sc': None,
                     'surface_hydrophobicity': None,
                     'interface_delta_unsat_hbonds': None,
@@ -188,6 +193,7 @@ class AlphaFold3Predictor:
         complex_plddt = None
         ranking_score = None
         pae_score = None
+        final_ipsae_min, lis_score = None, None
         pdb_path = None
         converted_pdb_path = None
         is_in_defined_binding_region = True
@@ -195,12 +201,12 @@ class AlphaFold3Predictor:
         prediction_subdir = Path(complex_output_dir)
 
         json_files = list(prediction_subdir.glob("*_confidences.json"))
-        metrics_file, plddt_file = sorted(json_files, key=lambda s: '_summary' not in str(s))
+        metrics_file, confidences_json = sorted(json_files, key=lambda s: '_summary' not in str(s))
         pdb_files = list(prediction_subdir.glob("*model.cif"))
 
         if json_files:
             try:
-                with open(metrics_file, 'r') as f, open(plddt_file, 'r') as l:
+                with open(metrics_file, 'r') as f, open(confidences_json, 'r') as l:
                     metrics = json.load(f)
                     plddt_file = json.load(l)
                 iptm_score = metrics.get('iptm')
@@ -235,6 +241,7 @@ class AlphaFold3Predictor:
                 contact_resn_target_chain = interface_resi_num(converted_pdb_path,'A','B')
                 is_in_defined_binding_region = validate_binder_contacts(contact_resn_target_chain,binding_region_str)
 
+            final_ipsae_min, lis_score = calculate_ipsae_min(str(confidences_json), str(pdb_path), "A", "B")
         return {
             "af3_status": "success",
             "iptm": iptm_score,
@@ -243,6 +250,8 @@ class AlphaFold3Predictor:
             'target_plddt': round(target_plddt / 100, 3),
             'complex_plddt': round(complex_plddt / 100, 3),
             'pae': pae_score,
+            'ipsae_min': final_ipsae_min,
+            'lis_score': lis_score,
             'shape_complementarity': sc,
             'surface_hydrophobicity': surface_hydrophobicity,
             'interface_delta_unsat_hbonds': interface_delta_unsat_hbonds,
@@ -323,6 +332,8 @@ class AlphaFold3Predictor:
                     'binder_plddt': None,
                     'target_plddt': None,
                     'pae': None,
+                    'ipsae_min': None,
+                    'lis_score': None,
                     'sc': None,
                     'surface_hydrophobicity': None,
                     'interface_delta_unsat_hbonds': None,
@@ -363,6 +374,8 @@ class AlphaFold3Predictor:
                          'binder_plddt': None,
                          'target_plddt': None,
                          'pae': None,
+                         'ipsae_min': None,
+                         'lis_score': None,
                          'sc': None,
                          'surface_hydrophobicity': None,
                          'interface_delta_unsat_hbonds': None,
@@ -451,6 +464,8 @@ class AlphaFold3Predictor:
                         'binder_plddt': None,
                         'target_plddt': None,
                         'pae': None,
+                        'ipsae_min': None,
+                        'lis_score': None,
                         'sc': None,
                         'surface_hydrophobicity': None,
                         'interface_delta_unsat_hbonds': None,
@@ -480,6 +495,8 @@ class AlphaFold3Predictor:
                     'binder_plddt': None,
                     'target_plddt': None,
                     'pae': None,
+                    'ipsae_min': None,
+                    'lis_score': None,
                     'sc': None,
                     'surface_hydrophobicity': None,
                     'interface_delta_unsat_hbonds': None,
@@ -504,6 +521,8 @@ class AlphaFold3Predictor:
                     'binder_plddt': None,
                     'target_plddt': None,
                     'pae': None,
+                    'ipsae_min': None,
+                    'lis_score': None,
                     'sc': None,
                     'surface_hydrophobicity': None,
                     'interface_delta_unsat_hbonds': None,
@@ -528,6 +547,8 @@ class AlphaFold3Predictor:
                     'binder_plddt': None,
                     'target_plddt': None,
                     'pae': None,
+                    'ipsae_min': None,
+                    'lis_score': None,
                     'sc': None,
                     'surface_hydrophobicity': None,
                     'interface_delta_unsat_hbonds': None,
